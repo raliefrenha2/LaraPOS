@@ -36,7 +36,7 @@ class AddRelationshipsToOrderDetailsTable extends Migration
         });
 
         Schema::table('order_details', function (Blueprint $table) {
-            $table->dropIndex('order_details_order_id_foregin');
+            $table->dropIndex('order_details_order_id_foreign');
         });
 
         Schema::table('order_details', function (Blueprint $table) {
@@ -44,7 +44,7 @@ class AddRelationshipsToOrderDetailsTable extends Migration
         });
 
         Schema::table('order_details', function (Blueprint $table) {
-            $table->dropForeign('order_details_products_id_foreign');
+            $table->dropForeign('order_details_product_id_foreign');
         });
 
         Schema::table('order_details', function (Blueprint $table) {
@@ -52,7 +52,7 @@ class AddRelationshipsToOrderDetailsTable extends Migration
         });
 
         Schema::table('order_details', function (Blueprint $table) {
-            $table->integer('product_id');
+            $table->integer('product_id')->change();
         });
     }
 }

@@ -15,7 +15,7 @@ class AddRelationshipsToProductsTable extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->integer('category_id')->unsigned()->change();
-            $table->foreign('cateory_id')->references('id')->on('categories')
+            $table->foreign('category_id')->references('id')->on('categories')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

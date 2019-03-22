@@ -13,14 +13,14 @@ class AddRelationshipsToOrderTable extends Migration
      */
     public function up()
     {
-        Schema::table('order', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->integer('customer_id')->unsigned()->change();
             $table->foreign('customer_id')->references('id')->on('customers')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->integer('user_id')->unsigned()->change();
-            $table->foreign('user_id')->references('id')->on('users')
-                ->onUpdate('cascade')->onDelete('cascade');
+            // $table->integer('user_id')->unsigned()->change();
+            // $table->foreign('user_id')->references('id')->on('users')
+            //     ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -43,16 +43,16 @@ class AddRelationshipsToOrderTable extends Migration
             $table->integer('customer_id')->change();
         });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign('orders_user_id_foreign');
-        });
+        // Schema::table('orders', function (Blueprint $table) {
+        //     $table->dropForeign('orders_user_id_foreign');
+        // });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropIndex('orders_user_id_foreign');
-        });
+        // Schema::table('orders', function (Blueprint $table) {
+        //     $table->dropIndex('orders_user_id_foreign');
+        // });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->integer('user_id')->change();
-        });
+        // Schema::table('orders', function (Blueprint $table) {
+        //     $table->integer('user_id')->change();
+        // });
     }
 }
