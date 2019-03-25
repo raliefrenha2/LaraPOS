@@ -79,10 +79,10 @@ class ProductController extends Controller
 
         //cek jika uploads/product bukan direktori / folder
 
-        // if (!File::isDirectory($path)) {
-        //     //maka folder tersebut dibuat
-        //     File::makeDirectory($path, 0777, true, true);
-        // }
+        if (!File::isDirectory($path)) {
+            //maka folder tersebut dibuat
+            File::makeDirectory($path, 0777, true, true);
+        }
 
         //simpan gambar yang diuplaod ke folrder uploads/produk
         Image::make($photo)->save($path . '/' . $images);
