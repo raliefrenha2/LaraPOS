@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,11 +14,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('login'));
+    // return view('welcome');
 });
 
-Route::resource('/kategori', 'CategoryController')->except([
-    'create', 'show'
-]);
+Auth::routes();
 
-Route::resource('/produk', 'ProductController');
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource('/kategori', 'CategoryController')->except([
+        'create', 'show'
+    ]);
+
+    Route::resource('/produk', 'ProductController');
+    Route::get('/home', 'HomeController@index')->name('home');
+});

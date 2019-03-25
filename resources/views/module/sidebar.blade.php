@@ -40,10 +40,10 @@
           </li>
         <li><a href="{{ route('kategori.index') }}"><i class="fa fa-book"></i> <span>Kategori</span></a></li>
         <li><a href="{{ route('produk.index') }}"><i class="fa fa-book"></i> <span>Produk</span></a></li>
-            <li class="treeview">
-              <a href="#">
+        <li class="treeview">
+          <a href="#">
                 <i class="fa fa-files-o"></i>
-            <span>Layout Options</span>
+                <span>Layout Options</span>
             <span class="pull-right-container">
               <span class="label label-primary pull-right">4</span>
             </span>
@@ -54,7 +54,7 @@
             <li><a href="../layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
             <li><a href="../layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
           </ul>
-        </li>
+        </li>x`
         
         <li class="treeview">
           <a href="#">
@@ -74,6 +74,11 @@
         <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
         <li class="header">LABELS</li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="{{ __('Logout') }}" onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();"><i class="fa fa-circle-o text-red"></i> <span>Log Out</span></a></li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
         
       </ul>
     </section>
