@@ -16,7 +16,7 @@
             </ol>
         </section>
         <section class="content">
-            <div class="ontainer-fluid">
+            <div class="container-fluid">
                 <div class="box box-success">
                     <div class="box-header">
                         <div class="box-body">

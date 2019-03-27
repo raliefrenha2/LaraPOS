@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header with-border">
-        <h3 class="card-title">{{ $title }}</h3>
+        <h4 class="card-title">{{ $title }}</h4>
     </div>
     <div class="card-body">
         {{ $slot }}
