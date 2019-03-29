@@ -39,7 +39,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/users/permission/{role}', 'UserController@setRolePermission')->name('users.setRolePermission');
     });
 
-    Route::group(['middleware' => 'cashier'], function () { });
+    Route::group(['middleware' => 'role:cashier'], function () {
+        Route::get('/transaksi', 'OrderController@addOrder')->name('order.transaksi');
+    });
 
     Route::group(['middleware' => ['role_or_permission:admin|show products|create products']], function () {
         Route::resource('/kategori', 'CategoryController')->except([

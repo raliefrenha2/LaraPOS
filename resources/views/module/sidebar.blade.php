@@ -47,9 +47,10 @@
               <ul class="treeview-menu">
                 <li><a href="{{ route('kategori.index') }}"><i class="fa fa-book"></i> <span>Kategori</span></a></li>
                 <li><a href="{{ route('produk.index') }}"><i class="fa fa-book"></i> <span>Produk</span></a></li>
-            </ul>
-          </li> 
-          @endrole      
+              </ul>
+            </li> 
+            @endrole      
+            <li><a href="{{ route('order.transaksi') }}"><i class="fa fa-circle-o text-red"></i> <span>Order</span></a></li>
           @role('admin')
           <li class="treeview">
           <a href="#">

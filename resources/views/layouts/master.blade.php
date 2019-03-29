@@ -13,6 +13,7 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{ URL::asset('vendor/adminlte/bower_components/Ionicons/css/ionicons.min.css') }}">
   <!-- Theme style -->
+  @yield('css')
   <link rel="stylesheet" href="{{ URL::asset('vendor/adminlte/dist/css/AdminLTE.min.css') }}">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
@@ -65,6 +66,7 @@
 <!-- AdminLTE App -->
 <script src="{{ URL::asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
+@yield('js')
 <script src="{{ URL::asset('vendor/adminlte/dist/js/demo.js') }}"></script>
 <script>
   $(document).ready(function () {
