@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use App\Http\Requests\UserRequest as UserRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -22,71 +23,50 @@ class UserController extends Controller
         return view('users.create', compact('role'));
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'role' => 'required|string|exists:roles,name'
-        ]);
-
-        $user = User::firstOrCreate([
-            'email' => $request->email
-        ], [
-            'name' => $request->name,
-            'password' => bcrypt($request->password),
-            'status' => true
-        ]);
+        $user = User::firstOrCreate($request->except('role','_token'),['status' => true]);
 
         $user->assignRole($request->role);
         return redirect(route('users.index'))->with(['success' => 'User: <strong>' . $user->name . '</strong> Ditambahkan']);
     }
 
-    public function edit($id)
+    public function edit(User $user)
     {
-        $user = User::findOrFail($id);
+        
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, User $user)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|exists:users,email',
-            'password' => 'nullable|min:6',
-        ]);
+        if (empty($request['password'])) {
+            unset($request['password']);
+        }
 
-        $user = User::findOrFail($id);
-        $password = !empty($request->password) ? bcrypt($request->password) : $user->password;
-        $user->update([
-            'name' => $request->name,
-            'password' => $password
-        ]);
+        // $password = !empty($request->password) ? bcrypt($request->password) : $user->password;
+        $user->update($request->input());
+        // dd($user);
         return redirect(route('users.index'))->with(['success' => 'User: <strong>' . $user->name . '</strong> Diperbaharui']);
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
         return redirect()->back()->with(['success' => 'User: <strong>' . $user->name . '</strong> Dihapus']);
     }
 
-    public function roles(Request $request, $id)
+    public function roles(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
         $roles = Role::all()->pluck('name');
         return view('users.roles', compact('user', 'roles'));
     }
 
-    public function setRole(Request $request, $id)
+    public function setRole(Request $request, User $user)
     {
         $this->validate($request, [
             'role' => 'required'
         ]);
 
-        $user = User::findOrFail($id);
         //menggunakan syncRoles agar terlebih dahulu menghapus semua role yang dimiliki
         //kemudian di-set kembali agar tidak terjadi duplicate
         $user->syncRoles($request->role);
@@ -108,13 +88,8 @@ class UserController extends Controller
         if (!empty($role)) {
             //select role berdasarkan namenya, ini sejenis dengan method find()
             $getRole = Role::findByName($role);
-
             //Query untuk mengambil permission yang telah dimiliki oleh role terkait
-            $hasPermission = DB::table('role_has_permissions')
-                ->select('permissions.name')
-                ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
-                ->where('role_id', $getRole->id)->get()->pluck('name')->all();
-
+            $hasPermission = User::hasPermission($getRole->id)->get()->pluck('name')->all();
             //Mengambil data permission
             $permissions = Permission::all()->pluck('name');
         }
