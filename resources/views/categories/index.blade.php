@@ -37,11 +37,17 @@
                                     <div class="box-body">
                                         @card
                                     @slot('title', 'Tambah')
-                                    
-                                    @if (session('error'))
-                                        @alert(['type' => 'danger'])
-                                            {!! session('error') !!}
-                                        @endalert
+                                 
+
+                                    @if($errors->any())
+                                     
+                                    @foreach($errors->all() as $error)
+                                    @alert(['type' => 'danger'])
+                                        {{ $error }}
+                                         @endalert
+                                    @endforeach
+                                   
+
                                     @endif
         ​
                                     <form role="form" action="{{ route('kategori.store') }}" method="POST">
@@ -50,11 +56,11 @@
                                             <label for="name">Kategori</label>
                                             <input type="text" 
                                             name="name"
-                                            class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name" required>
+                                            class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name" value="{{ old('name') }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="description">Deskripsi</label>
-                                            <textarea name="description" id="description" cols="5" rows="5" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}"></textarea>
+                                            <textarea name="description" id="description" cols="5" rows="5" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}" ></textarea>
                                         </div>
                                     @slot('footer')
                                         <div class="card-footer">

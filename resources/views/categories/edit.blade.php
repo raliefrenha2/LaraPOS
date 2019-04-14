@@ -29,28 +29,34 @@
                     <div class="col-md-6">
                         @card
                             @slot('title')
-                            Edit
+                                Edit
                             @endslot
                             
-                            @if (session('error'))
-                                @alert(['type' => 'danger'])
-                                    {!! session('error') !!}
-                                @endalert
-                            @endif
+
+                            @if($errors->any())
+                                     
+                                @foreach($errors->all() as $error)
+                                    @alert(['type' => 'danger'])
+                                        {{ $error }}
+                                     @endalert
+                                @endforeach
+                               
+
+                             @endif
 ​
-                            <form role="form" action="{{ route('kategori.update', $categories->id) }}" method="POST">
+                            <form role="form" action="{{ route('kategori.update', $kategori->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="_method" value="PUT">
                                 <div class="form-group">
                                     <label for="name">Kategori</label>
                                     <input type="text" 
                                         name="name"
-                                        value="{{ $categories->name }}"
-                                        class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name" required>
+                                        value="{{ $kategori->name }}"
+                                        class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name" value="{{ old('name') }}"s required>
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Deskripsi</label>
-                                    <textarea name="description" id="description" cols="5" rows="5" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}">{{ $categories->description }}</textarea>
+                                    <textarea name="description" id="description" cols="5" rows="5" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}">{{ $kategori->description }}</textarea>
                                 </div>
                             @slot('footer')
                                 <div class="card-footer">

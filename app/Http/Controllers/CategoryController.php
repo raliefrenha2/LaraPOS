@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Requests\CategoryRequest as Request;
 
 class CategoryController extends Controller
 {
@@ -15,60 +15,35 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        //Validasi Form
 
-        $this->validate($request, [
-            'name' => 'required|string|max:50',
-            'description' => 'nullable|string'
-        ]);
+        $category = Category::firstOrCreate($request->validated());
+        return redirect()->back()->with(['success' => 'Kategori: ' . $category->name . ' Ditambahkan']);
 
-        try {
-            $categories = Category::firstOrCreate([
-                'name' => $request->name
-            ], [
-                'description' => $request->description
-            ]);
-            return redirect()->back()->with(['success' => 'Kategori: ' . $categories->name . ' Ditambahkan']);
-        } catch (\Exception $th) {
-            return redirect()->back()->with(['error' => $th->getMessage()]);
-        }
     }
 
-    public function edit($id)
+    public function edit(Category $kategori)
     {
-        $categories = Category::findOrFail($id);
-        return view('categories.edit', compact('categories'));
+         // $category = Category::findOrFail($id);
+        // dd($kategori);
+        return view('categories.edit', compact('kategori'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $kategori)
     {
-        //validasi form
-        $this->validate($request, [
-            'name' => 'required|string|max:50',
-            'description' => 'nullable|string'
-        ]);
 
-        try {
-            //select data berdasarkan id
-            $categories = Category::findOrFail($id);
-            //update data
-            $categories->update([
-                'name' => $request->name,
-                'description' => $request->description
-            ]);
+        $kategori->update($request->validated());
+        // $kategori->update($request->except('_token'));
+        return redirect(route('kategori.index'))->with(['success' => 'Kategori: ' . $kategori->name . ' Diperbarui']);
 
-            //redirect ke route kategori.index
-            return redirect(route('kategori.index'))->with(['success' => 'Kategori: ' . $categories->name . ' Diperbarui']);
-        } catch (\Exception $e) {
-            //jika gagal, redirect ke form yang sama lalu membuat flash message error
-            return redirect()->back()->with(['error' => $e->getMessage()]);
-        }
+        // Pelajaran dari Laravel 5.7 laravel-from-scratch episode 14
+        // buat parameter Category $category
+        // $category->update(request(['name', 'description']));
+        // return redirect ...
     }
 
-    public function destroy($id)
+    public function destroy(Category $kategori)
     {
-        $categories = Category::findOrFail($id);
-        $categories->delete();
-        return redirect()->back()->with(['success' => 'Kategori: ' . $categories->name . ' Telah Dihapus']);
+        $kategori->delete();
+        return redirect()->back()->with(['success' => 'Kategori: ' . $kategori->name . ' Telah Dihapus']);
     }
 }
