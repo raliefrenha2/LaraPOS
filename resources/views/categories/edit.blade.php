@@ -33,36 +33,35 @@
                             @endslot
                             
 
-                            @if($errors->any())
-                                     
+                            @if($errors->any())     
                                 @foreach($errors->all() as $error)
                                     @alert(['type' => 'danger'])
                                         {{ $error }}
                                      @endalert
                                 @endforeach
-                               
-
                              @endif
-​
-                            <form role="form" action="{{ route('kategori.update', $kategori->id) }}" method="POST">
-                                @csrf
+​                           {{ Form::open(array('route' => array('kategori.update', $kategori->id),'method' => 'POST','role' => 'form')) }}
+                            <!-- <form role="form" action="{{ route('kategori.update', $kategori->id) }}" method="POST">
+                                @csrf -->
                                 <input type="hidden" name="_method" value="PUT">
                                 <div class="form-group">
-                                    <label for="name">Kategori</label>
+                                    {{ Form::label('name', 'Kategori') }}
+                                   <!--  <label for="name">Kategori</label> -->
+                                  {{--  {!! Form::text('name', $kategori->name, array('class' => 'form-control'  )) !!} --}}
                                     <input type="text" 
                                         name="name"
                                         value="{{ $kategori->name }}"
-                                        class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name" value="{{ old('name') }}"s required>
+                                        class="form-control {{ $errors->has('name') ? 'red':'' }}" id="name" value="{{ old('name') }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Deskripsi</label>
-                                    <textarea name="description" id="description" cols="5" rows="5" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}">{{ $kategori->description }}</textarea>
+                                    <textarea name="description" id="description" cols="5" rows="5" class="form-control {{ $errors->has('description') ? 'red':'' }}">{{ $kategori->description }}</textarea>
                                 </div>
                             @slot('footer')
                                 <div class="card-footer">
                                     <button class="btn btn-info">Update</button>
                                 </div>
-                            </form>
+                            {{ Form::close() }}
                             @endslot
                         @endcard
                     </div>

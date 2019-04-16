@@ -24,12 +24,17 @@
                                 <div class="col-md-4">
                                     @card 
                                     @slot('title', 'Add New Permission')
+                                    @if(session('permission_success'))
+                                        @alert(['type' => 'success'])
+                                            {!! session('permission_success') !!}
+                                        @endalert
+                                    @endif
 
                                     <form action="{{ route('users.add_permission') }}" method="post">
                                         @csrf
                                         <div class="form-group">
                                             <label for="">Name</label>
-                                            <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" required>
+                                            <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'red':'' }}" >
                                             <p class="text-danger">{{ $errors->first('name') }}</p>
                                         </div>
                                         <div class="form-group">
@@ -47,9 +52,9 @@
                                     @card
                                         @slot('title', 'Set Permission to Role')
 
-                                        @if (session('error'))
-                                            @alert(['type' => 'danger'])
-                                                {!! session('error') !!}
+                                        @if(session('success'))
+                                            @alert(['type' => 'success'])
+                                                {!! session('success') !!}
                                             @endalert
                                         @endif
 

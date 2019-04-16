@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Http\Requests\UserRequest as UserRequest;
+use App\Http\Requests\RoleRequest as RoleRequest;
+use App\Http\Requests\PermissionRequest as PermissionRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -61,12 +63,8 @@ class UserController extends Controller
         return view('users.roles', compact('user', 'roles'));
     }
 
-    public function setRole(Request $request, User $user)
+    public function setRole(RoleRequest $request, User $user)
     {
-        $this->validate($request, [
-            'role' => 'required'
-        ]);
-
         //menggunakan syncRoles agar terlebih dahulu menghapus semua role yang dimiliki
         //kemudian di-set kembali agar tidak terjadi duplicate
         $user->syncRoles($request->role);
@@ -78,6 +76,7 @@ class UserController extends Controller
     {
         $role = $request->get('role');
 
+
         //Default, set dua buah variable dengan nilai null
         $permissions = null;
         $hasPermission = null;
@@ -88,6 +87,7 @@ class UserController extends Controller
         if (!empty($role)) {
             //select role berdasarkan namenya, ini sejenis dengan method find()
             $getRole = Role::findByName($role);
+            // dd($getRole);
             //Query untuk mengambil permission yang telah dimiliki oleh role terkait
             $hasPermission = User::hasPermission($getRole->id)->get()->pluck('name')->all();
             //Mengambil data permission
@@ -96,16 +96,13 @@ class UserController extends Controller
         return view('users.role_permission', compact('roles', 'permissions', 'hasPermission'));
     }
 
-    public function addPermission(Request $request)
+    public function addPermission(PermissionRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|unique:permissions'
-        ]);
 
         $permission = Permission::firstOrCreate([
             'name' => $request->name
         ]);
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'Permission Added']);
     }
 
     public function setRolePermission(Request $request, $role)

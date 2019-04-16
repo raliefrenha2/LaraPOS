@@ -39,12 +39,10 @@ class UserRequest extends FormRequest
         }
 
         // dd($rules);
-        
 
         return $rules;
 
     }
-
 
 
 }
